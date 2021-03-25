@@ -1,11 +1,29 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: "blinka-report"
+description: "Report test results to Blinka"
+author: "davidwessman"
 inputs:
-  milliseconds: # change this
+  repository:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: "Github repository, e.g. davidwessman/blinka_action"
+
+  token_id:
+    required: true
+    description: "Blinka token id from Github secrets"
+
+  token_secret:
+    required: true
+    description: "Blinka token secret from Github secrets"
+
+  filename:
+    required: false
+    description: "Filename of json-report"
+    default: "blinka_results.json"
+
+  blinka_host:
+    required: false
+    description: "Allow overriding host for Blinka"
+    default: "https://www.blinka.app/api/v1"
+
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node12"
+  main: "dist/index.js"
