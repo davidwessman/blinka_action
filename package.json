@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "blinka-reporting",
+  "version": "0.0.1",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Report test results to Blinka",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -10,34 +10,43 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "test": "jest",
+    "test": "jest --testLocationInResults",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/davidwessman/blinka_action.git"
   },
   "keywords": [
     "actions",
-    "node",
-    "setup"
+    "test reporting",
+    "CI"
   ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.6"
+    "@actions/core": "^1.2.6",
+    "@actions/http-client": "^1.0.9",
+    "form-data": "^4.0.0",
+    "mime": "^2.5.2"
   },
   "devDependencies": {
+    "@jest/reporters": "^26.6.2",
+    "@jest/test-result": "^26.6.2",
     "@types/jest": "^26.0.22",
+    "@types/mime": "^2.0.3",
     "@types/node": "^14.14.36",
     "@typescript-eslint/parser": "^4.19.0",
     "@vercel/ncc": "^0.27.0",
     "eslint": "^7.22.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-github": "^4.1.2",
     "eslint-plugin-jest": "^24.3.2",
+    "eslint-plugin-prettier": "^3.3.1",
     "jest": "^26.6.3",
     "jest-circus": "^26.6.3",
     "js-yaml": "^4.0.0",
+    "nock": "^13.0.11",
     "prettier": "2.2.1",
     "ts-jest": "^26.5.4",
     "typescript": "^4.2.3"

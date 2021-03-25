@@ -1,0 +1,127 @@
+{
+  "total_time": 7.435241000028327,
+  "nbr_tests": 61,
+  "nbr_assertions": 142,
+  "commit": "fake",
+  "tag": "fake-data",
+  "seed": 49132,
+  "results": [
+    {
+      "backtrace": [
+        "app/views/presentation/index.html.erb:11"
+      ],
+      "message": "ActionView::Template::Error: undefined method `counts' for #<Class:0x00007ff646ce3648>\nDid you mean?  count",
+      "line": 5,
+      "image": "./__tests__/image.png",
+      "kind": "system",
+      "name": "test_visit_landing_page",
+      "path": "test/system/landing_test.rb",
+      "result": "error",
+      "time": 1.9572430000407621
+    },
+    {
+      "line": 22,
+      "kind": "lib",
+      "name": "test_authorize_team_-_fails_if_nil",
+      "path": "test/lib/authorize_api_request_test.rb",
+      "result": "pass",
+      "time": 0.017700999975204468
+    },
+    {
+      "line": 16,
+      "kind": "lib",
+      "name": "test_authorize_team_-_fails_if_failed",
+      "path": "test/lib/authorize_api_request_test.rb",
+      "result": "pass",
+      "time": 0.0012880000285804272
+    },
+    {
+      "line": 5,
+      "kind": "lib",
+      "name": "test_authorize_team",
+      "path": "test/lib/authorize_api_request_test.rb",
+      "result": "pass",
+      "time": 0.029708000016398728
+    },
+    {
+      "line": 31,
+      "kind": "controllers",
+      "name": "test_DELETE_#destroy_-_cannot_delete_admin_membership",
+      "path": "test/controllers/teams/memberships_controller_test.rb",
+      "result": "pass",
+      "time": 0.10615800006780773
+    },
+    {
+      "line": 12,
+      "kind": "controllers",
+      "name": "test_DELETE_#destroy_-_delete_normal_membership",
+      "path": "test/controllers/teams/memberships_controller_test.rb",
+      "result": "pass",
+      "time": 0.028430000063963234
+    },
+    {
+      "line": 21,
+      "kind": "controllers",
+      "name": "test_DELETE_#destroy_-_require_admin",
+      "path": "test/controllers/teams/memberships_controller_test.rb",
+      "result": "pass",
+      "time": 0.04255300003569573
+    },
+    {
+      "line": 5,
+      "kind": "workers",
+      "name": "test_#perform_-_correct_merge_commit_sha",
+      "path": "test/workers/report_worker_test.rb",
+      "result": "pass",
+      "time": 0.09788800007663667
+    },
+    {
+      "line": 29,
+      "kind": "workers",
+      "name": "test_#perform_-_correct_head.sha",
+      "path": "test/workers/report_worker_test.rb",
+      "result": "pass",
+      "time": 0.037780000013299286
+    },
+    {
+      "line": 53,
+      "kind": "workers",
+      "name": "test_#perform_-_no_pr_present",
+      "path": "test/workers/report_worker_test.rb",
+      "result": "pass",
+      "time": 0.03331999992951751
+    },
+    {
+      "line": 166,
+      "kind": "services",
+      "name": "test_#github_url_for_file_-_without_line",
+      "path": "test/services/run_reporter_test.rb",
+      "result": "pass",
+      "time": 0.0009719999507069588
+    },
+    {
+      "line": 35,
+      "kind": "services",
+      "name": "test_#status_text_-_if_empty",
+      "path": "test/services/run_reporter_test.rb",
+      "result": "pass",
+      "time": 0.007885999977588654
+    },
+    {
+      "line": 109,
+      "kind": "services",
+      "name": "test_#test_run_comment",
+      "path": "test/services/run_reporter_test.rb",
+      "result": "pass",
+      "time": 0.007014999981038272
+    },
+    {
+      "line": 5,
+      "kind": "services",
+      "name": "test_#status_text",
+      "path": "test/services/run_reporter_test.rb",
+      "result": "pass",
+      "time": 0.024916999973356724
+    }
+  ]
+}
