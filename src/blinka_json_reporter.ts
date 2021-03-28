@@ -65,4 +65,15 @@ export default class BlinkaJSONReporter
       }
     })
   }
+
+  private translate_status(status: string): string {
+    switch (status) {
+      case 'passed':
+        return 'pass'
+      case 'skipped':
+        return 'skip'
+      default:
+        return 'fail'
+    }
+  }
 }
