@@ -46,6 +46,10 @@ test('handle_image', async () => {
   const result = await client.handle_image('./__tests__/image.png')
 })
 
+test.skip('skip failing the tests', async () => {
+  expect(1).toBe(2)
+})
+
 async function emptyMockReadBody(): Promise<string> {
   return new Promise(resolve => {
     resolve('')
