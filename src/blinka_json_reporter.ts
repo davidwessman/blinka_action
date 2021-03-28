@@ -36,7 +36,7 @@ export default class BlinkaJSONReporter
       total_time: 7.54,
       nbr_tests: 5,
       nbr_assertions: 10,
-      commit: '123usadsa',
+      commit: process.env.COMMIT || 'missing-commit',
       tag: '',
       results: test_results,
       seed: null

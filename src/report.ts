@@ -127,11 +127,10 @@ export class BlinkaClient {
     return Promise.all(results.map(async result => this.convert_result(result)))
   }
 
-  async report(body: TestReportBody): Promise<void> {
-    const response = await this.client.post(
-      `${this.host}/report`,
-      JSON.stringify(body)
-    )
+  async report(report_body: TestReportBody): Promise<void> {
+    const body = JSON.stringify(report_body)
+    core.debug(body)
+    const response = await this.client.post(`${this.host}/report`, body)
 
     if (response.message.statusCode !== 200) {
       throw new BlinkaError(`Could not report test results to ${this.host}`)
@@ -140,6 +139,9 @@ export class BlinkaClient {
 
   async convert_result(result: JsonResult): Promise<TestReportResult> {
     const image = await this.handle_image(result.image)
+    if (image) {
+      core.debug(image.toString())
+    }
     return {
       ...result,
       image

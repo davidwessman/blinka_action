@@ -13,13 +13,17 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           npm install
-      - run: |
+      - env:
+          COMMIT: ${{ github.even.pull_request.head.sha || github.sha }}
+        run: |
           npm run all
-      - run: |
+      - if: always()
+        run: |
           mkdir ./report
           [ ! -f ./blinka_results.json ] || mv blinka_results.json ./report
 
       - uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: report
           path: ./report
