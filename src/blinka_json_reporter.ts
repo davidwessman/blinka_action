@@ -8,7 +8,7 @@ interface IResult {
   name: string
   path: string
   result: string
-  kind: string | null
+  kind: string
   time: number | null
   backtrace: string[] | null
   message: string | null
@@ -58,7 +58,7 @@ export default class BlinkaJSONReporter
         path: path.relative(project_directory, result.testFilePath),
         result: test_result.status,
         time: test_result.duration ? test_result.duration / 1000 : 0,
-        kind: null,
+        kind: 'jest',
         backtrace: test_result.failureMessages,
         message: null,
         image: null
