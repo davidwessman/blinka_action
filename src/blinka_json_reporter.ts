@@ -56,7 +56,7 @@ export default class BlinkaJSONReporter
         line: test_result.location?.line || 0,
         name: test_result.fullName,
         path: path.relative(project_directory, result.testFilePath),
-        result: test_result.status,
+        result: this.translate_status(test_result.status),
         time: test_result.duration ? test_result.duration / 1000 : 0,
         kind: 'jest',
         backtrace: test_result.failureMessages,
