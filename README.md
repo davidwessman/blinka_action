@@ -4,7 +4,7 @@
   </a>
 </p>
 
-# blinka_action - Reporting test results to Blinka
+# Reporting test results to Blinka
 
 ## What is Blinka?
 
