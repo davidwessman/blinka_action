@@ -1,6 +1,9 @@
-name: "blinka-report"
+name: "blinka"
 description: "Report test results to Blinka"
 author: "davidwessman"
+branding:
+  icon: "book-open"
+  color: "green"
 inputs:
   repository:
     required: true
