@@ -14,15 +14,25 @@
 
 ![Example of Blinka comment on a pull request](./blinka-example.png?raw=true)
 
+## Setup
+
+- Add the Github App to your account and give access to repositories [Blinka Bot](https://github.com/apps/blinka-bot).
+- Register an account on [Blinka](https://www.blinka.app/user/new)
+- When your account is confirmed:
+  - Add your repositories in the Blinka UI.
+  - Create an access token and store the `token_id` and `token_secret` in your Github Secrets, I use the names `BLINKA_TOKEN_ID` and `BLINKA_TOKEN_SECRET` in the actions below.
+- Setup reporting with this action.
+
 ## Workflow
 
 1. Generate test results by using one of the reporters:
-  - For Ruby on Rails see [blinka-reporter](https://github.com/davidwessman/blinka-reporter)
-  - For Jest see [Generate test report for Jest](#generate-test-report-for-jest)
-2. If your CI builds are always running with access to Secrets (not from forks or for example Dependabot), skip to step 7.
-3. Store `blinka_results.json` as an artifact along with any screenshots.
-4. In a reporting job running with access to Secrets, download the report and screenshots.
-5. Run the action
+    - For Ruby on Rails see [blinka-reporter](https://github.com/davidwessman/blinka-reporter)
+    - For Jest see [Generate test report for Jest](#generate-test-report-for-jest)
+2. If your CI builds are always running with access to Secrets (not from forks or for example Dependabot), continue with [Example 1](#example-1-full-access-to-secrets).
+3. If you sometimes build without secrets, continue with [Example 2](#example-2-separate-reporting-job)
+    - Store `blinka_results.json` as an artifact along with any screenshots.
+    - In a reporting job running with access to Secrets, download the report and screenshots.
+    - Run the action
 
 
 ## Example 1: Full access to secrets
