@@ -71,6 +71,7 @@ export default class BlinkaJSONReporter
       case 'passed':
         return 'pass'
       case 'skipped':
+      case 'pending':
         return 'skip'
       default:
         return 'fail'
