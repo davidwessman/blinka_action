@@ -17,6 +17,7 @@ jobs:
           COMMIT: ${{ github.even.pull_request.head.sha || github.sha }}
         run: |
           npm run all
+
       - if: always()
         run: |
           mkdir ./report
