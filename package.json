@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@jest/reporters": "^27.0.5",
-    "@jest/test-result": "^27.0.2",
+    "@jest/test-result": "^27.0.6",
     "@types/jest": "^26.0.23",
     "@types/mime": "^2.0.3",
     "@types/node": "^15.12.5",
