@@ -35,7 +35,7 @@
     "@jest/test-result": "^27.0.6",
     "@types/jest": "^26.0.24",
     "@types/mime": "^2.0.3",
-    "@types/node": "^15.14.0",
+    "@types/node": "^15.14.4",
     "@typescript-eslint/parser": "^4.28.5",
     "@vercel/ncc": "^0.29.0",
     "eslint": "^7.31.0",
