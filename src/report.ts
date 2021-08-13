@@ -1,10 +1,10 @@
+import * as auth from '@actions/http-client/auth'
+import * as core from '@actions/core'
+import * as httpm from '@actions/http-client'
+import formData from 'form-data'
 import fs from 'fs'
 import mime from 'mime'
 import path from 'path'
-import * as core from '@actions/core'
-import * as httpm from '@actions/http-client'
-import * as auth from '@actions/http-client/auth'
-import formData from 'form-data'
 
 interface Result {
   line: number

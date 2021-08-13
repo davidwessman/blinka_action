@@ -3,7 +3,7 @@ import * as http from 'http'
 import {BlinkaError, BlinkaClient, report} from '../src/report'
 import {HttpClient, HttpClientResponse} from '@actions/http-client'
 import * as core from '@actions/core'
-import * as _reporter from '../src/blinka_json_reporter'
+import * as _reporter from '../src/blinka-json-reporter'
 import formData from 'form-data'
 import nock from 'nock'
 

@@ -208,6 +208,6 @@ jobs:
 
 ## Generate test report for Jest
 
-- Copy the [`blinka_json_reporter.ts`](./src/blinka_json_reporter.ts) to your own project.
+- Copy the [`blinka-json-reporter.ts`](./src/blinka-json-reporter.ts) to your own project.
 - Configure Jest to use the reporter, for example in [`jest.config.js`](./jest.config.js#L10) or using the flag `--reporters` (see [Documentation](https://jestjs.io/docs/configuration#reporters-arraymodulename--modulename-options))
 - Make sure to run Jest using `--testLocationInResults` to include reporting of line numbers.
