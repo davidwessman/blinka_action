@@ -1,7 +1,7 @@
-import {Reporter, Context} from '@jest/reporters'
-import {AggregatedResult, TestResult} from '@jest/test-result'
 import * as fs from 'fs'
 import * as path from 'path'
+import {AggregatedResult, TestResult} from '@jest/test-result'
+import {Context, Reporter} from '@jest/reporters'
 
 interface IResult {
   line: number
@@ -26,7 +26,8 @@ interface IReport {
 }
 
 export default class BlinkaJSONReporter
-  implements Pick<Reporter, 'onRunComplete'> {
+  implements Pick<Reporter, 'onRunComplete'>
+{
   async onRunComplete(
     _: Set<Context>,
     results: AggregatedResult
