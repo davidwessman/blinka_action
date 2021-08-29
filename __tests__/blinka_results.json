@@ -16,7 +16,7 @@
       "kind": "system",
       "name": "test_visit_landing_page",
       "path": "test/system/landing_test.rb",
-      "result": "error",
+      "result": "fail",
       "time": 1.9572430000407621
     },
     {
@@ -120,7 +120,7 @@
       "kind": "services",
       "name": "test_#status_text",
       "path": "test/services/run_reporter_test.rb",
-      "result": "pass",
+      "result": "skip",
       "time": 0.024916999973356724
     }
   ]

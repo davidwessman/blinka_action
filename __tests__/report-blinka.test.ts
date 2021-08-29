@@ -1,10 +1,11 @@
 import * as net from 'net'
 import * as http from 'http'
-import {BlinkaError, BlinkaClient, report} from '../src/report'
+import * as github from '@actions/github'
+import {BlinkaError} from '../src/shared'
+import {BlinkaClient, report_to_blinka} from '../src/report-blinka'
 import {HttpClient, HttpClientResponse} from '@actions/http-client'
 import * as core from '@actions/core'
 import * as _reporter from '../src/blinka-json-reporter'
-import formData from 'form-data'
 import nock from 'nock'
 
 const VALID_TOKEN_ID = 'VALID_FAKE_TOKEN_ID'
@@ -12,6 +13,16 @@ const VALID_AUTH_TOKEN = 'VALID_FAKE_TOKEN_SECRET'
 // Use http here to be able to stub it
 const S3_URL = 'http://blinka.s3storage.fake'
 const TEST_HOST = 'https://blinka.testing.fake/api/v1'
+
+beforeAll(async () => {
+  // Mock github context
+  jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
+    return {
+      owner: 'davidwessman',
+      repo: 'blinka_action'
+    }
+  })
+})
 
 test('setup client with authentication', async () => {
   setupHttpClientMock()
@@ -28,11 +39,10 @@ test('setup client with invalid authentication', async () => {
   await expect(client.setup()).rejects.toBeInstanceOf(BlinkaError)
 })
 
-test('report', async () => {
+test('report-to-blinka', async () => {
   setupHttpClientMock()
-  let result = await report(
+  let result = await report_to_blinka(
     './__tests__/blinka_results.json',
-    'davidwessman/blinka_action',
     'TOKEN_ID',
     'TOKEN_SECRET',
     TEST_HOST

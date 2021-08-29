@@ -1,70 +1,19 @@
 import * as auth from '@actions/http-client/auth'
 import * as core from '@actions/core'
+import * as github from '@actions/github'
 import * as httpm from '@actions/http-client'
+import {BlinkaError, readJSON} from './shared'
+import {
+  JsonReport,
+  JsonResult,
+  TestReportBody,
+  TestReportResult,
+  UploadedImage
+} from './types'
 import formData from 'form-data'
 import fs from 'fs'
 import mime from 'mime'
 import path from 'path'
-
-interface Result {
-  line: number
-  name: string
-  path: string
-  result: string
-  kind: string | null
-  time: number | null
-  backtrace: string[] | null
-  message: string | null
-}
-
-interface JsonResult extends Result {
-  image: string | null
-}
-
-interface JsonReport {
-  total_time: number
-  nbr_tests: number
-  nbr_assertions: number
-  commit: string
-  tag: string
-  seed: number
-  results: JsonResult[]
-}
-
-interface ReportMetadata {
-  total_time: number
-  nbr_tests: number
-  nbr_assertions: number
-  seed: number
-}
-
-interface UploadedImageMetadata {
-  size: number | null
-  filename: string
-  mime_type: string | null
-}
-
-interface UploadedImage {
-  id: string
-  storage: string
-  metadata: UploadedImageMetadata
-}
-
-interface TestReportResult extends Result {
-  image: UploadedImage | null
-}
-
-interface TestReport {
-  repository: string
-  tag: string
-  commit: string
-  metadata: ReportMetadata
-  results: TestReportResult[]
-}
-
-interface TestReportBody {
-  report: TestReport
-}
 
 function initialize_client(token: string | null = null): httpm.HttpClient {
   const bearers: auth.BearerCredentialHandler[] = []
@@ -77,13 +26,6 @@ function initialize_client(token: string | null = null): httpm.HttpClient {
       'Content-Type': 'application/json'
     }
   })
-}
-
-export class BlinkaError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = 'BlinkaError'
-  }
 }
 
 export class BlinkaClient {
@@ -190,15 +132,15 @@ export class BlinkaClient {
   }
 }
 
-export async function report(
+export async function report_to_blinka(
   filename: string,
-  repository: string,
   token_id: string,
   token_secret: string,
   blinka_host = 'https://www.blinka.app/api/v1'
 ): Promise<Boolean> {
   const data: JsonReport = await readJSON(filename)
   const client = new BlinkaClient(blinka_host, token_id, token_secret)
+  const repo = github.context.repo
   try {
     await client.setup()
 
@@ -206,7 +148,7 @@ export async function report(
 
     const body: TestReportBody = {
       report: {
-        repository,
+        repository: `${repo.owner}/${repo.repo}`,
         tag: data.tag,
         commit: data.commit,
         metadata: {
@@ -226,8 +168,4 @@ export async function report(
   }
 
   return true
-}
-
-async function readJSON(filename: string): Promise<JsonReport> {
-  return JSON.parse(fs.readFileSync(filename, 'utf-8'))
 }

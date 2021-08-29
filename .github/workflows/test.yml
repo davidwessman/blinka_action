@@ -38,7 +38,18 @@ jobs:
 
       - uses: ./
         with:
-          repository: davidwessman/blinka_action
           token_id: ${{ secrets.BLINKA_TOKEN_ID }}
           token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
+          filename: "./__tests__/blinka_results.json"
+
+  test_github: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          sed -i 's/\"commit\": \"fake\"/\"commit\": \"${{ github.even.pull_request.head.sha || github.sha }}\"/g' ./__tests__/blinka_results.json
+
+      - uses: ./
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           filename: "./__tests__/blinka_results.json"
