@@ -75,7 +75,7 @@ export default class BlinkaJSONReporter
       case 'pending':
         return 'skip'
       default:
-        return 'fail'
+        return 'error'
     }
   }
 }

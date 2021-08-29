@@ -1,21 +1,21 @@
 name: "blinka-reporting"
-description: "Report test results to Blinka"
+description: "Blinka reporting of test results"
 author: "davidwessman"
 branding:
   icon: "book-open"
   color: "green"
 inputs:
-  repository:
-    required: true
-    description: "Github repository, e.g. davidwessman/blinka_action"
-
   token_id:
-    required: true
+    required: false
     description: "Blinka token id from Github secrets"
 
   token_secret:
-    required: true
+    required: false
     description: "Blinka token secret from Github secrets"
+
+  github_token:
+    required: false
+    description: "Github token through Github secrets"
 
   filename:
     required: false

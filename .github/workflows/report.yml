@@ -39,10 +39,15 @@ jobs:
             fs.writeFileSync('${{github.workspace}}/report.zip', Buffer.from(download.data));
       - run: unzip report.zip
 
-      - name: "Upload reports"
+      - name: "Upload report to Blinka"
         uses: ./
         with:
-          repository: davidwessman/blinka_action
           token_id: ${{ secrets.BLINKA_TOKEN_ID }}
           token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
+          filename: "./blinka_results.json"
+
+      - name: "Write directly to Github"
+        uses: ./
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           filename: "./blinka_results.json"
