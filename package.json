@@ -31,13 +31,13 @@
     "mime": "^2.5.2"
   },
   "devDependencies": {
-    "@jest/reporters": "^27.0.6",
+    "@jest/reporters": "^27.1.0",
     "@jest/test-result": "^27.0.6",
     "@types/jest": "^27.0.1",
     "@types/mime": "^2.0.3",
     "@types/node": "^15.14.9",
     "@typescript-eslint/parser": "^4.29.3",
-    "@vercel/ncc": "^0.29.2",
+    "@vercel/ncc": "^0.30.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-github": "^4.2.0",
