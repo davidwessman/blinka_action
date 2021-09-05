@@ -163,7 +163,9 @@ export async function report_to_blinka(
 
     await client.report(body)
   } catch (error) {
-    core.warning(error.message)
+    if (error instanceof Error) {
+      core.warning(error.message)
+    }
     return false
   }
 
