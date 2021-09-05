@@ -97,7 +97,9 @@ export async function report_to_github(
     const client = new GithubClient(github_token)
     await client.report(data)
   } catch (error) {
-    core.warning(error.message)
+    if (error instanceof Error) {
+      core.warning(error.message)
+    }
     return false
   }
 

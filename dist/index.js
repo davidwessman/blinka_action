@@ -36,14 +36,16 @@ async function run() {
         const token_secret = core.getInput('token_secret');
         const github_token = core.getInput('github_token');
         if (token_id && token_secret) {
-            report_blinka_1.report_to_blinka(filename, token_id, token_secret);
+            (0, report_blinka_1.report_to_blinka)(filename, token_id, token_secret);
         }
         else {
-            report_github_1.report_to_github(filename, github_token);
+            (0, report_github_1.report_to_github)(filename, github_token);
         }
     }
     catch (error) {
-        core.setFailed(error.message);
+        if (error instanceof Error) {
+            core.setFailed(error.message);
+        }
     }
 }
 run();
@@ -183,7 +185,7 @@ class BlinkaClient {
 }
 exports.BlinkaClient = BlinkaClient;
 async function report_to_blinka(filename, token_id, token_secret, blinka_host = 'https://www.blinka.app/api/v1') {
-    const data = await shared_1.readJSON(filename);
+    const data = await (0, shared_1.readJSON)(filename);
     const client = new BlinkaClient(blinka_host, token_id, token_secret);
     const repo = github.context.repo;
     try {
@@ -206,7 +208,9 @@ async function report_to_blinka(filename, token_id, token_secret, blinka_host = 
         await client.report(body);
     }
     catch (error) {
-        core.warning(error.message);
+        if (error instanceof Error) {
+            core.warning(error.message);
+        }
         return false;
     }
     return true;
@@ -324,12 +328,14 @@ class GithubClient {
 exports.GithubClient = GithubClient;
 async function report_to_github(filename, github_token) {
     try {
-        const data = await shared_1.readJSON(filename);
+        const data = await (0, shared_1.readJSON)(filename);
         const client = new GithubClient(github_token);
         await client.report(data);
     }
     catch (error) {
-        core.warning(error.message);
+        if (error instanceof Error) {
+            core.warning(error.message);
+        }
         return false;
     }
     return true;
