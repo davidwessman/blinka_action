@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="8" failures="1" errors="0" time="19.281">
+  <testsuite name="undefined" errors="0" failures="1" skipped="0" timestamp="2021-09-08T10:33:21" time="18.4" tests="3">
+    <testcase classname=" report_to_github - pull_request" name=" report_to_github - pull_request" time="0.024">
+    </testcase>
+    <testcase classname=" report_to_github - junit - pull_request" name=" report_to_github - junit - pull_request" time="16.034">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+    at Object.&lt;anonymous&gt; (/Users/davidwessman/programming/github-actions/blinka_action/__tests__/report-github.test.ts:57:18)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)</failure>
+    </testcase>
+    <testcase classname=" report_to_github - pull_request existing comment" name=" report_to_github - pull_request existing comment" time="0.016">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="1" timestamp="2021-09-08T10:33:40" time="0.724" tests="5">
+    <testcase classname=" setup client with authentication" name=" setup client with authentication" time="0.008">
+    </testcase>
+    <testcase classname=" setup client with invalid authentication" name=" setup client with invalid authentication" time="0.005">
+    </testcase>
+    <testcase classname=" report_to_blinka" name=" report_to_blinka" time="0.012">
+    </testcase>
+    <testcase classname=" handle_image" name=" handle_image" time="0.017">
+    </testcase>
+    <testcase classname=" skip failing the tests" name=" skip failing the tests" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+</testsuites>

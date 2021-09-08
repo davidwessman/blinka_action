@@ -7,6 +7,6 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest'
   },
-  reporters: ['default', './lib/blinka-json-reporter.js'],
+  reporters: ['default', './lib/blinka-json-reporter.js', ['jest-junit', { suiteName: "jest tests" }]],
   verbose: true
 }

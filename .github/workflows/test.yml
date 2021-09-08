@@ -51,5 +51,12 @@ jobs:
 
       - uses: ./
         with:
+          tag: blinka.json
           github_token: ${{ secrets.GITHUB_TOKEN }}
           filename: "./__tests__/blinka_results.json"
+
+      - uses: ./
+        with:
+          tag: junit
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          filename: "./__tests__/junit.xml"

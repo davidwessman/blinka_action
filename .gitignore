@@ -97,4 +97,6 @@ Thumbs.db
 # Ignore built ts files
 __tests__/runner/*
 lib/**/*
+
 /blinka_results.json
+/junit.xml

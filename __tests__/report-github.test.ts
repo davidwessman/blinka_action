@@ -43,6 +43,17 @@ test('report_to_github - pull_request', async () => {
   stubGithubApi(false)
   let result = await report_to_github(
     './__tests__/blinka_results.json',
+    'main',
+    'TOKENTOKEN'
+  )
+  expect(result).toBe(true)
+})
+
+test('report_to_github - junit - pull_request', async () => {
+  stubGithubApi(false)
+  let result = await report_to_github(
+    './__tests__/junit.xml',
+    'main',
     'TOKENTOKEN'
   )
   expect(result).toBe(true)
@@ -52,6 +63,7 @@ test('report_to_github - pull_request existing comment', async () => {
   stubGithubApi(true)
   let result = await report_to_github(
     './__tests__/blinka_results.json',
+    'main',
     'TOKENTOKEN'
   )
   expect(result).toBe(true)

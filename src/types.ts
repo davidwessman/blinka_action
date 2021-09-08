@@ -16,7 +16,6 @@ export interface JsonResult extends Result {
 export interface JsonReport {
   total_time: number
   nbr_tests: number
-  nbr_assertions: number
   commit: string
   tag: string
   seed: number
@@ -26,7 +25,6 @@ export interface JsonReport {
 export interface ReportMetadata {
   total_time: number
   nbr_tests: number
-  nbr_assertions: number
   seed: number
 }
 
@@ -56,4 +54,34 @@ export interface TestReport {
 
 export interface TestReportBody {
   report: TestReport
+}
+
+export interface JunitTestCase {
+  classname: string
+  name: string
+  time: string
+  failure: string | null
+  skipped: string | null
+}
+
+export interface JunitTestSuite {
+  name: string
+  errors: string
+  failures: string
+  skipped: string
+  timestamp: string
+  time: string
+  tests: string
+  testcase: JunitTestCase[]
+}
+
+export interface JunitReport {
+  testsuites: {
+    name: string
+    tests: string
+    failures: string
+    errors: string
+    time: string
+    testsuite: JunitTestSuite[]
+  }
 }

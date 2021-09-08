@@ -22,6 +22,11 @@ inputs:
     description: "Filename of json-report"
     default: "blinka_results.json"
 
+  tag:
+    required: false
+    description: "Allow adding a tag to the report, to be able to separate them."
+    default: ""
+
   blinka_host:
     required: false
     description: "Allow overriding host for Blinka"

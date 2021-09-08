@@ -1,19 +1,21 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {BlinkaError, readJSON} from './shared'
+import {BlinkaError, readTestResults} from './shared'
 import {GitHub} from '@actions/github/lib/utils'
 import {JsonReport} from './types'
 
 export class GithubClient {
   octokit: InstanceType<typeof GitHub>
   pull_request_number: number
+  tag: string
 
-  constructor(token: string) {
+  constructor(token: string, tag: string) {
     this.octokit = github.getOctokit(token)
     if (github.context.payload.pull_request == null) {
       throw new BlinkaError(`Only works for pull requests`)
     }
     this.pull_request_number = github.context.payload.pull_request.number
+    this.tag = tag
   }
 
   async report(data: JsonReport): Promise<void> {
@@ -45,8 +47,8 @@ export class GithubClient {
       }
     }
 
-    const tag = 'Blinka results!'
-    let body = `${tag}\nTest results: ${counts.pass} pass, ${counts.skip} skipped and ${counts.fail} failed\n`
+    const first = `Blinka results! ${this.tag}`
+    let body = `${first}\nTest results: ${counts.pass} pass, ${counts.skip} skipped and ${counts.fail} failed\n`
     body += `It took ${total_duration.toFixed(2)} seconds to run.\n`
     if (failures.length > 0) {
       body += '\n### Failures\n'
@@ -63,7 +65,7 @@ export class GithubClient {
     let existingComment = null
     for (const comment of comments.data) {
       if (
-        comment.body?.startsWith(tag) &&
+        comment.body?.startsWith(first) &&
         comment.user?.login === 'github-actions[bot]'
       ) {
         existingComment = comment
@@ -89,11 +91,12 @@ export class GithubClient {
 
 export async function report_to_github(
   filename: string,
+  tag: string,
   github_token: string
 ): Promise<Boolean> {
   try {
-    const data: JsonReport = await readJSON(filename)
-    const client = new GithubClient(github_token)
+    const data: JsonReport = await readTestResults(filename)
+    const client = new GithubClient(github_token, tag)
     await client.report(data)
   } catch (error) {
     if (error instanceof Error) {

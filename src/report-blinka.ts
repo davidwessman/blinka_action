@@ -130,6 +130,7 @@ export class BlinkaClient {
 
 export async function report_to_blinka(
   filename: string,
+  tag: string,
   token_id: string,
   token_secret: string,
   blinka_host = 'https://www.blinka.app/api/v1'
@@ -145,12 +146,11 @@ export async function report_to_blinka(
     const body: TestReportBody = {
       report: {
         repository: `${repo.owner}/${repo.repo}`,
-        tag: data.tag,
+        tag: tag || data.tag,
         commit: data.commit,
         metadata: {
           total_time: data.total_time,
           nbr_tests: data.nbr_tests,
-          nbr_assertions: data.nbr_assertions,
           seed: data.seed
         },
         results
