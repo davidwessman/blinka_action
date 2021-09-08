@@ -4,38 +4,6 @@
   "before": "b0f32cbb79a6f4d1cae063078db48292adae2018",
   "number": 188,
   "pull_request": {
-    "_links": {
-      "comments": {
-        "href": "https://api.github.com/repos/davidwessman/blinka_action/issues/188/comments"
-      },
-      "commits": {
-        "href": "https://api.github.com/repos/davidwessman/blinka_action/pulls/188/commits"
-      },
-      "html": {
-        "href": "https://github.com/davidwessman/blinka_action/pull/188"
-      },
-      "issue": {
-        "href": "https://api.github.com/repos/davidwessman/blinka_action/issues/188"
-      },
-      "review_comment": {
-        "href": "https://api.github.com/repos/davidwessman/blinka_action/pulls/comments{/number}"
-      },
-      "review_comments": {
-        "href": "https://api.github.com/repos/davidwessman/blinka_action/pulls/188/comments"
-      },
-      "self": {
-        "href": "https://api.github.com/repos/davidwessman/blinka_action/pulls/188"
-      },
-      "statuses": {
-        "href": "https://api.github.com/repos/davidwessman/blinka_action/statuses/a145ab65e57c419b0249a162f179189a6ff63a67"
-      }
-    },
-    "active_lock_reason": null,
-    "additions": 6335,
-    "assignee": null,
-    "assignees": [],
-    "author_association": "OWNER",
-    "auto_merge": null,
     "base": {
       "label": "davidwessman:main",
       "ref": "main",

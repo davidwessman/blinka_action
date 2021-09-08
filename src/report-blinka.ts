@@ -71,7 +71,6 @@ export class BlinkaClient {
 
   async report(report_body: TestReportBody): Promise<void> {
     const body = JSON.stringify(report_body)
-    core.debug(body)
     const response = await this.client.post(`${this.host}/report`, body)
 
     if (response.message.statusCode !== 200) {
@@ -81,9 +80,6 @@ export class BlinkaClient {
 
   async convert_result(result: JsonResult): Promise<TestReportResult> {
     const image = await this.handle_image(result.image)
-    if (image) {
-      core.debug(image.toString())
-    }
     return {
       ...result,
       image

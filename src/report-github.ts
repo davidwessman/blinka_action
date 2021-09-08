@@ -11,7 +11,6 @@ export class GithubClient {
   constructor(token: string) {
     this.octokit = github.getOctokit(token)
     if (github.context.payload.pull_request == null) {
-      core.setFailed('No pull request found.')
       throw new BlinkaError(`Only works for pull requests`)
     }
     this.pull_request_number = github.context.payload.pull_request.number
