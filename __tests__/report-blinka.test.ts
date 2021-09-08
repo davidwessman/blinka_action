@@ -43,6 +43,7 @@ test('report_to_blinka', async () => {
   setupHttpClientMock()
   let result = await report_to_blinka(
     './__tests__/blinka_results.json',
+    'main',
     VALID_TOKEN_ID,
     'FAKE SECRET',
     TEST_HOST

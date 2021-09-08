@@ -1,4 +1,6 @@
-import {JsonReport} from './types'
+import * as github from '@actions/github'
+import * as parser from 'fast-xml-parser'
+import {JsonReport, JsonResult, JunitReport} from './types'
 import fs from 'fs'
 
 export class BlinkaError extends Error {
@@ -7,6 +9,76 @@ export class BlinkaError extends Error {
     this.name = 'BlinkaError'
   }
 }
+
+export async function readTestResults(filename: string): Promise<JsonReport> {
+  if (filename.endsWith('.json')) {
+    return readJSON(filename)
+  } else {
+    const data = await readJunit(filename)
+    fs.writeFileSync('./junit.json', JSON.stringify(data, null, 2))
+
+    const blinkaData = convertJunitToBlinka(data)
+    fs.writeFileSync('./junit2blinka.json', JSON.stringify(blinkaData, null, 2))
+
+    return blinkaData
+  }
+}
+
 export async function readJSON(filename: string): Promise<JsonReport> {
   return JSON.parse(fs.readFileSync(filename, 'utf-8'))
+}
+
+export async function readJunit(filename: string): Promise<JunitReport> {
+  try {
+    return parser.parse(fs.readFileSync(filename, 'utf-8'), {
+      ignoreAttributes: false,
+      attributeNamePrefix: ''
+    })
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new BlinkaError(
+        `Failed to parse junit-file ${filename}: ${error.message}`
+      )
+    }
+    throw new BlinkaError(`Failed to parse junit-file ${filename}`)
+  }
+}
+
+function convertJunitToBlinka(data: JunitReport): JsonReport {
+  const results: JsonResult[] = []
+  let total_time = 0
+
+  for (const testsuite of data.testsuites.testsuite) {
+    for (const testcase of testsuite.testcase) {
+      const time = Number(testcase.time)
+      total_time += time
+      let result = 'pass'
+      if (testcase.skipped !== undefined) {
+        result = 'skip'
+      } else if (testcase.failure !== undefined) {
+        result = 'fail'
+      }
+      results.push({
+        line: 0,
+        name: testcase.name,
+        result,
+        time,
+        message: testcase.failure || '',
+        path: '',
+        backtrace: null,
+        kind: null,
+        image: null
+      })
+    }
+  }
+  const report: JsonReport = {
+    commit: github.context?.sha || 'unknown',
+    total_time,
+    nbr_tests: results.length,
+    tag: '',
+    seed: 0,
+    results
+  }
+
+  return report
 }

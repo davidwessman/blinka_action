@@ -18,7 +18,6 @@ interface IResult {
 interface IReport {
   total_time: number
   nbr_tests: number
-  nbr_assertions: number
   commit: string
   tag: string
   seed: number | null
@@ -36,7 +35,6 @@ export default class BlinkaJSONReporter
     const report: IReport = {
       total_time: 7.54,
       nbr_tests: 5,
-      nbr_assertions: 10,
       commit: process.env.COMMIT || 'missing-commit',
       tag: '',
       results: test_results,
