@@ -29,7 +29,7 @@ test('setup client with authentication', async () => {
 
   const client = new BlinkaClient(TEST_HOST, VALID_TOKEN_ID, 'FAKE SECRET')
   await client.setup()
-  expect(client.authenticated).toBeTruthy
+  expect(client.authenticated).toBe(true)
 })
 
 test('setup client with invalid authentication', async () => {
@@ -39,21 +39,22 @@ test('setup client with invalid authentication', async () => {
   await expect(client.setup()).rejects.toBeInstanceOf(BlinkaError)
 })
 
-test('report-to-blinka', async () => {
+test('report_to_blinka', async () => {
   setupHttpClientMock()
   let result = await report_to_blinka(
     './__tests__/blinka_results.json',
-    'TOKEN_ID',
-    'TOKEN_SECRET',
+    VALID_TOKEN_ID,
+    'FAKE SECRET',
     TEST_HOST
   )
-  expect(result).toBeTruthy
+  expect(result).toBe(true)
 })
 
 test('handle_image', async () => {
   setupHttpClientMock()
   const client = new BlinkaClient(TEST_HOST, VALID_TOKEN_ID, 'FAKE SECRET')
   const result = await client.handle_image('./__tests__/image.png')
+  expect(result).not.toBeUndefined
 })
 
 test.skip('skip failing the tests', async () => {

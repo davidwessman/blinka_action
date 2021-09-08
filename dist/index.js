@@ -132,7 +132,6 @@ class BlinkaClient {
     }
     async report(report_body) {
         const body = JSON.stringify(report_body);
-        core.debug(body);
         const response = await this.client.post(`${this.host}/report`, body);
         if (response.message.statusCode !== 200) {
             throw new shared_1.BlinkaError(`Could not report test results to ${this.host}`);
@@ -140,9 +139,6 @@ class BlinkaClient {
     }
     async convert_result(result) {
         const image = await this.handle_image(result.image);
-        if (image) {
-            core.debug(image.toString());
-        }
         return {
             ...result,
             image
@@ -253,7 +249,6 @@ class GithubClient {
     constructor(token) {
         this.octokit = github.getOctokit(token);
         if (github.context.payload.pull_request == null) {
-            core.setFailed('No pull request found.');
             throw new shared_1.BlinkaError(`Only works for pull requests`);
         }
         this.pull_request_number = github.context.payload.pull_request.number;
