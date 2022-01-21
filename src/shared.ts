@@ -1,6 +1,6 @@
 import * as github from '@actions/github'
-import * as parser from 'fast-xml-parser'
 import {JsonReport, JsonResult, JunitReport} from './types'
+import {XMLParser} from 'fast-xml-parser'
 import fs from 'fs'
 
 export class BlinkaError extends Error {
@@ -30,10 +30,11 @@ export async function readJSON(filename: string): Promise<JsonReport> {
 
 export async function readJunit(filename: string): Promise<JunitReport> {
   try {
-    return parser.parse(fs.readFileSync(filename, 'utf-8'), {
+    const parser = new XMLParser({
       ignoreAttributes: false,
       attributeNamePrefix: ''
     })
+    return parser.parse(fs.readFileSync(filename, 'utf-8'))
   } catch (error) {
     if (error instanceof Error) {
       throw new BlinkaError(
