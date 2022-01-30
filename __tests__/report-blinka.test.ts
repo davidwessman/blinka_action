@@ -66,7 +66,7 @@ test('report_to_blinka - junit', async () => {
 test('report_to_blinka - laravel junit', async () => {
   setupHttpClientMock()
   let result = await report_to_blinka(
-    './__tests__/laravel_results.xml',
+    './__tests__/laravel.xml',
     'main',
     VALID_TOKEN_ID,
     'FAKE SECRET',

@@ -1,37 +1,37 @@
-name: "blinka-reporting"
-description: "Blinka reporting of test results"
-author: "davidwessman"
+name: 'blinka-reporting'
+description: 'Blinka reporting of test results'
+author: 'davidwessman'
 branding:
-  icon: "book-open"
-  color: "green"
+  icon: 'book-open'
+  color: 'green'
 inputs:
   token_id:
     required: false
-    description: "Blinka token id from Github secrets"
+    description: 'Blinka token id from Github secrets'
 
   token_secret:
     required: false
-    description: "Blinka token secret from Github secrets"
+    description: 'Blinka token secret from Github secrets'
 
   github_token:
     required: false
-    description: "Github token through Github secrets"
+    description: 'Github token through Github secrets'
 
   filename:
     required: false
-    description: "Filename of json-report"
-    default: "blinka_results.json"
+    description: 'Filename of json-report'
+    default: 'blinka_results.json'
 
   tag:
     required: false
-    description: "Allow adding a tag to the report, to be able to separate them."
-    default: ""
+    description: 'Allow adding a tag to the report, to be able to separate them.'
+    default: ''
 
   blinka_host:
     required: false
-    description: "Allow overriding host for Blinka"
-    default: "https://www.blinka.app/api/v1"
+    description: 'Allow overriding host for Blinka'
+    default: 'https://www.blinka.app/api/v1'
 
 runs:
-  using: "node12"
-  main: "dist/index.js"
+  using: 'node12'
+  main: 'dist/index.js'

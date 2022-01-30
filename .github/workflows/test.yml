@@ -4,7 +4,7 @@ on: # rebuild any PRs and main branch changes
   push:
     branches:
       - main
-      - "releases/*"
+      - 'releases/*'
 
 jobs:
   build: # make sure build/ci work properly
@@ -40,7 +40,7 @@ jobs:
         with:
           token_id: ${{ secrets.BLINKA_TOKEN_ID }}
           token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
-          filename: "./__tests__/blinka_results.json"
+          filename: './__tests__/blinka_results.json'
 
   test_github: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
@@ -53,10 +53,10 @@ jobs:
         with:
           tag: blinka.json
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          filename: "./__tests__/blinka_results.json"
+          filename: './__tests__/blinka_results.json'
 
       - uses: ./
         with:
           tag: junit
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          filename: "./__tests__/junit.xml"
+          filename: './__tests__/junit.xml'

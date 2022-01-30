@@ -1,5 +1,5 @@
 import * as github from '@actions/github'
-import {JsonReport, JsonResult, JunitReport, JunitTestSuite, JunitTestCase} from './types'
+import {JsonReport, JsonResult, JunitReport, JunitTestSuite} from './types'
 import {XMLParser} from 'fast-xml-parser'
 import fs from 'fs'
 
@@ -14,13 +14,7 @@ export async function readTestResults(filename: string): Promise<JsonReport> {
   if (filename.endsWith('.json')) {
     return readJSON(filename)
   } else {
-    const data = await readJunit(filename)
-    fs.writeFileSync('./junit.json', JSON.stringify(data, null, 2))
-
-    const blinkaData = convertJunitToBlinka(data)
-    fs.writeFileSync('./junit2blinka.json', JSON.stringify(blinkaData, null, 2))
-
-    return blinkaData
+    return convertJunitToBlinka(await readJunit(filename))
   }
 }
 
@@ -28,12 +22,25 @@ export async function readJSON(filename: string): Promise<JsonReport> {
   return JSON.parse(fs.readFileSync(filename, 'utf-8'))
 }
 
+function junitIsArray(path: string): boolean {
+  const keys = [
+    'testsuites.testsuite',
+    'testsuites.testsuite.testcase',
+    'testsuites.testsuite.testsuite.testcase'
+  ]
+
+  return keys.includes(path)
+}
+
 export async function readJunit(filename: string): Promise<JunitReport> {
   try {
     const parser = new XMLParser({
       ignoreAttributes: false,
       attributeNamePrefix: '',
-      isArray: () => true
+      alwaysCreateTextNode: true,
+      isArray: (name: string, jpath: string) => {
+        return junitIsArray(jpath)
+      }
     })
     return parser.parse(fs.readFileSync(filename, 'utf-8'))
   } catch (error) {
@@ -49,24 +56,21 @@ export async function readJunit(filename: string): Promise<JunitReport> {
 function convertJunitToBlinka(data: JunitReport): JsonReport {
   const results: JsonResult[] = []
   let total_time = 0
+
   const testsuites: JunitTestSuite[] = []
 
-  if (Array.isArray(data.testsuites.testsuite)) {
-    testsuites.concat(data.testsuites.testsuite)
-  } else if (data.testsuites.testsuite) {
-    testsuites.push(data.testsuites.testsuite)
+  for (const testsuite of data.testsuites.testsuite) {
+    if ('testsuite' in testsuite) {
+      for (const nested of testsuite.testsuite) {
+        testsuites.push(nested)
+      }
+    } else {
+      testsuites.push(testsuite)
+    }
   }
 
   for (const testsuite of testsuites) {
-    const testcases: JunitTestCase[] = []
-
-    if (Array.isArray(testsuite.testcase)) {
-      testcases.concat(testsuite.testcase)
-    } else if (testsuite.testcase) {
-      testcases.push(testsuite.testcase)
-    }
-
-    for (const testcase of testcases) {
+    for (const testcase of testsuite.testcase) {
       const time = Number(testcase.time)
       total_time += time
       let result = 'pass'
@@ -75,13 +79,26 @@ function convertJunitToBlinka(data: JunitReport): JsonReport {
       } else if (testcase.failure !== undefined) {
         result = 'fail'
       }
+
+      let name = testcase.name
+      if (testcase.classname && testcase.classname !== testcase.name) {
+        name = `${testcase.classname} ${testcase.name}`
+      }
+      let message = ''
+      if (
+        'failure' in testcase &&
+        testcase.failure &&
+        '#text' in testcase.failure
+      ) {
+        message = testcase.failure['#text']
+      }
       results.push({
-        line: 0,
-        name: testcase.name,
+        line: Number(testcase.line || 0),
+        name,
         result,
         time,
-        message: testcase.failure || '',
-        path: '',
+        message: message,
+        path: testcase.path || testcase.file || '',
         backtrace: null,
         kind: null,
         image: null
