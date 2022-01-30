@@ -1,5 +1,5 @@
 import * as github from '@actions/github'
-import {JsonReport, JsonResult, JunitReport} from './types'
+import {JsonReport, JsonResult, JunitReport, JunitTestSuite, JunitTestCase} from './types'
 import {XMLParser} from 'fast-xml-parser'
 import fs from 'fs'
 
@@ -32,7 +32,8 @@ export async function readJunit(filename: string): Promise<JunitReport> {
   try {
     const parser = new XMLParser({
       ignoreAttributes: false,
-      attributeNamePrefix: ''
+      attributeNamePrefix: '',
+      isArray: () => true
     })
     return parser.parse(fs.readFileSync(filename, 'utf-8'))
   } catch (error) {
@@ -48,9 +49,24 @@ export async function readJunit(filename: string): Promise<JunitReport> {
 function convertJunitToBlinka(data: JunitReport): JsonReport {
   const results: JsonResult[] = []
   let total_time = 0
+  const testsuites: JunitTestSuite[] = []
 
-  for (const testsuite of data.testsuites.testsuite) {
-    for (const testcase of testsuite.testcase) {
+  if (Array.isArray(data.testsuites.testsuite)) {
+    testsuites.concat(data.testsuites.testsuite)
+  } else if (data.testsuites.testsuite) {
+    testsuites.push(data.testsuites.testsuite)
+  }
+
+  for (const testsuite of testsuites) {
+    const testcases: JunitTestCase[] = []
+
+    if (Array.isArray(testsuite.testcase)) {
+      testcases.concat(testsuite.testcase)
+    } else if (testsuite.testcase) {
+      testcases.push(testsuite.testcase)
+    }
+
+    for (const testcase of testcases) {
       const time = Number(testcase.time)
       total_time += time
       let result = 'pass'

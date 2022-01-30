@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/var/www/html/tests" tests="5" assertions="5" errors="0" warnings="0" failures="2" skipped="0" time="8.805530">
+    <testsuite name="Tests\Browser\ScreenshotTest" file="/var/www/html/tests/Browser/ScreenshotTest.php" tests="2" assertions="2" errors="0" warnings="0" failures="1" skipped="0" time="8.623558">
+      <testcase name="testBasicExample" class="Tests\Browser\ScreenshotTest" classname="Tests.Browser.ScreenshotTest" file="/var/www/html/tests/Browser/ScreenshotTest.php" line="16" assertions="1" time="7.766092"/>
+      <testcase name="testFailingExample" class="Tests\Browser\ScreenshotTest" classname="Tests.Browser.ScreenshotTest" file="/var/www/html/tests/Browser/ScreenshotTest.php" line="25" assertions="1" time="0.857467">
+        <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Browser\ScreenshotTest::testFailingExample
+Did not see expected text [Blinka is the worst] within element [body].
+Failed asserting that false is true.
+
+/var/www/html/vendor/laravel/dusk/src/Concerns/MakesAssertions.php:181
+/var/www/html/vendor/laravel/dusk/src/Concerns/MakesAssertions.php:152
+/var/www/html/tests/Browser/ScreenshotTest.php:29
+/var/www/html/vendor/laravel/dusk/src/Concerns/ProvidesBrowser.php:69
+/var/www/html/tests/Browser/ScreenshotTest.php:30</failure>
+      </testcase>
+    </testsuite>
+    <testsuite name="Tests\Feature\ExampleTest" file="/var/www/html/tests/Feature/ExampleTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.181799">
+      <testcase name="test_example" class="Tests\Feature\ExampleTest" classname="Tests.Feature.ExampleTest" file="/var/www/html/tests/Feature/ExampleTest.php" line="15" assertions="1" time="0.181799"/>
+    </testsuite>
+    <testsuite name="Tests\Unit\ExampleTest" file="/var/www/html/tests/Unit/ExampleTest.php" tests="2" assertions="2" errors="0" warnings="0" failures="1" skipped="0" time="0.000173">
+      <testcase name="test_example" class="Tests\Unit\ExampleTest" classname="Tests.Unit.ExampleTest" file="/var/www/html/tests/Unit/ExampleTest.php" line="14" assertions="1" time="0.000108"/>
+      <testcase name="test_failing_example" class="Tests\Unit\ExampleTest" classname="Tests.Unit.ExampleTest" file="/var/www/html/tests/Unit/ExampleTest.php" line="19" assertions="1" time="0.000065">
+        <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Unit\ExampleTest::test_failing_example
+Failed asserting that false is true.
+
+/var/www/html/tests/Unit/ExampleTest.php:21</failure>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>
