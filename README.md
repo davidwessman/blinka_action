@@ -113,9 +113,9 @@ This is a simpler version running directly in Github Action with no access to ex
 
         - name: Report to Github PR
           uses: davidwessman/blinka_action@v1
-            with:
-              filename: ./test/blinka_results.json
-              github_token: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            filename: ./test/blinka_results.json
+            github_token: ${{ secrets.GITHUB_TOKEN }}
   ```
 </details>
 
