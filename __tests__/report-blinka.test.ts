@@ -39,10 +39,34 @@ test('setup client with invalid authentication', async () => {
   await expect(client.setup()).rejects.toBeInstanceOf(BlinkaError)
 })
 
-test('report_to_blinka', async () => {
+test('report_to_blinka - json', async () => {
   setupHttpClientMock()
   let result = await report_to_blinka(
     './__tests__/blinka_results.json',
+    'main',
+    VALID_TOKEN_ID,
+    'FAKE SECRET',
+    TEST_HOST
+  )
+  expect(result).toBe(true)
+})
+
+test('report_to_blinka - junit', async () => {
+  setupHttpClientMock()
+  let result = await report_to_blinka(
+    './__tests__/junit.xml',
+    'main',
+    VALID_TOKEN_ID,
+    'FAKE SECRET',
+    TEST_HOST
+  )
+  expect(result).toBe(true)
+})
+
+test('report_to_blinka - laravel junit', async () => {
+  setupHttpClientMock()
+  let result = await report_to_blinka(
+    './__tests__/laravel_results.xml',
     'main',
     VALID_TOKEN_ID,
     'FAKE SECRET',

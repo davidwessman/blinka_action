@@ -2,7 +2,7 @@ import * as auth from '@actions/http-client/auth'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as httpm from '@actions/http-client'
-import {BlinkaError, readJSON} from './shared'
+import {BlinkaError, readTestResults} from './shared'
 import {
   JsonReport,
   JsonResult,
@@ -135,7 +135,7 @@ export async function report_to_blinka(
   token_secret: string,
   blinka_host = 'https://www.blinka.app/api/v1'
 ): Promise<Boolean> {
-  const data: JsonReport = await readJSON(filename)
+  const data: JsonReport = await readTestResults(filename)
   const client = new BlinkaClient(blinka_host, token_id, token_secret)
   const repo = github.context.repo
   try {
