@@ -7,9 +7,7 @@
   "seed": 49132,
   "results": [
     {
-      "backtrace": [
-        "app/views/presentation/index.html.erb:11"
-      ],
+      "backtrace": ["app/views/presentation/index.html.erb:11"],
       "message": "ActionView::Template::Error: undefined method `counts' for #<Class:0x00007ff646ce3648>\nDid you mean?  count",
       "line": 5,
       "image": "./__tests__/image.png",

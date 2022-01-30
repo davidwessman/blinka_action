@@ -62,7 +62,7 @@ test('report_to_github - junit - pull_request', async () => {
 test('report_to_github - junit laravel - pull_request', async () => {
   stubGithubApi(false)
   let result = await report_to_github(
-    './__tests__/laravel_results.xml',
+    './__tests__/laravel.xml',
     'main',
     'TOKENTOKEN'
   )

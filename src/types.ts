@@ -56,12 +56,20 @@ export interface TestReportBody {
   report: TestReport
 }
 
+export interface AttributeWithText {
+  '#text': string
+  type: string | null
+}
+
 export interface JunitTestCase {
   classname: string
   name: string
   time: string
-  failure: string | null
+  failure: AttributeWithText | null
   skipped: string | null
+  line: number | null
+  file: string | null
+  path: string | null
 }
 
 export interface JunitTestSuite {
@@ -73,6 +81,7 @@ export interface JunitTestSuite {
   time: string
   tests: string
   testcase: JunitTestCase[]
+  testsuite: JunitTestSuite[]
 }
 
 export interface JunitReport {

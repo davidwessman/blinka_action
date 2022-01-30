@@ -16,21 +16,22 @@
 
 This is a simpler version running directly in Github Action with no access to external service.
 
-
 **Limitations**
 
 - No access to test history
 - No ability to show screenshots in test reports
 
-
 ### Steps
 
 1. Generate test results by using one of the reporters:
-  - For Ruby on Rails see [blinka-reporter](https://github.com/davidwessman/blinka-reporter)
-  - For Jest see [Generate test report for Jest](#generate-test-report-for-jest)
+
+- For Ruby on Rails see [blinka-reporter](https://github.com/davidwessman/blinka-reporter)
+- For Jest see [Generate test report for Jest](#generate-test-report-for-jest)
+
 2. Add the action `davidwessman/blinka_action@v1` in a step after the tests run with parameters:
-  - `github_token: ${{ secrets.GITHUB_TOKEN }}` after tests.
-  - `filename` - the path of your formatted test results from step 1.
+
+- `github_token: ${{ secrets.GITHUB_TOKEN }}` after tests.
+- `filename` - the path of your formatted test results from step 1.
 
 ```yaml
   # Rails Github Action seetup
@@ -51,77 +52,65 @@ This is a simpler version running directly in Github Action with no access to ex
 
   <summary>See full example</summary>
 
-  ```yaml
-  name: Main
-  on: [push]
+```yaml
+name: Main
+on: [push]
 
-  jobs:
-    tests:
-      name: Tests
-      runs-on: ubuntu-20.04
-      services:
-        postgres:
-          image: postgres:13
-          env:
-            POSTGRES_USER: postgres
-            POSTGRES_DB: synka_test
-            POSTGRES_PASSWORD: "password"
-          ports: ["5432:5432"]
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: synka_test
+          POSTGRES_PASSWORD: 'password'
+        ports: ['5432:5432']
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Setup Ruby
-          uses: ruby/setup-ruby@v1
-          with:
-            bundler-cache: true
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
 
-        - name: Setup Node
-          uses: actions/setup-node@v1
-          with:
-            node-version: 12.x
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: 'yarn'
 
-        - name: Find yarn cache location
-          id: yarn-cache
-          run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Install packages
+        run: |
+          yarn install --pure-lockfile
 
-        - name: JS package cache
-          uses: actions/cache@v1
-          with:
-            path: ${{ steps.yarn-cache.outputs.dir }}
-            key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-            restore-keys: |
-              ${{ runner.os }}-yarn-
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          PGUSER: myapp
+        run: |
+          bin/rails db:setup
 
-        - name: Install packages
-          run: |
-            yarn install --pure-lockfile
+      - name: Run tests
+        env:
+          BLINKA_JSON: true
+        run: bundle exec rails test:system test
 
-        - name: Setup test database
-          env:
-            RAILS_ENV: test
-            PGHOST: localhost
-            PGUSER: myapp
-          run: |
-            bin/rails db:setup
+      - name: Report to Github PR
+        uses: davidwessman/blinka_action@v1
+        with:
+          filename: ./test/blinka_results.json
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+```
 
-        - name: Run tests
-          env:
-            BLINKA_JSON: true
-          run: bundle exec rails test:system test
-
-        - name: Report to Github PR
-          uses: davidwessman/blinka_action@v1
-          with:
-            filename: ./test/blinka_results.json
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-  ```
 </details>
 
-
 3. Start building your tests and see the results reported!
-
 
 ## Setup with blinka.app
 
@@ -135,14 +124,13 @@ This is a simpler version running directly in Github Action with no access to ex
 ## Workflow
 
 1. Generate test results by using one of the reporters:
-    - For Ruby on Rails see [blinka-reporter](https://github.com/davidwessman/blinka-reporter)
-    - For Jest see [Generate test report for Jest](#generate-test-report-for-jest)
+   - For Ruby on Rails see [blinka-reporter](https://github.com/davidwessman/blinka-reporter)
+   - For Jest see [Generate test report for Jest](#generate-test-report-for-jest)
 2. If your CI builds are always running with access to Secrets (not from forks or for example Dependabot), continue with [Example 1](#example-1---use-blinkaapp-with-full-access-to-secrets).
 3. If you sometimes build without secrets, continue with [Example 2](#example-2---separate-reporting-job)
-    - Store `blinka_results.json` as an artifact along with any screenshots.
-    - In a reporting job running with access to Secrets, download the report and screenshots.
-    - Run the action
-
+   - Store `blinka_results.json` as an artifact along with any screenshots.
+   - In a reporting job running with access to Secrets, download the report and screenshots.
+   - Run the action
 
 ## Example 1 - Use blinka.app with full access to secrets
 
@@ -165,72 +153,62 @@ This is a simpler version running directly in Github Action with no access to ex
 
   <summary>See full example</summary>
 
-  ```yaml
-  name: Main
-  on: [push]
+```yaml
+name: Main
+on: [push]
 
-  jobs:
-    tests:
-      name: Tests
-      runs-on: ubuntu-20.04
-      services:
-        postgres:
-          image: postgres:13
-          env:
-            POSTGRES_USER: postgres
-            POSTGRES_DB: synka_test
-            POSTGRES_PASSWORD: "password"
-          ports: ["5432:5432"]
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: synka_test
+          POSTGRES_PASSWORD: "password"
+        ports: ["5432:5432"]
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Setup Ruby
-          uses: ruby/setup-ruby@v1
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: "yarn"
+
+      - name: Install packages
+        run: |
+          yarn install --pure-lockfile
+
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          PGUSER: myapp
+        run: |
+          bin/rails db:setup
+
+      - name: Run tests
+        env:
+          BLINKA_JSON: true
+        run: bundle exec rails test:system test
+
+      - name: Report to Blinka
+        uses: davidwessman/blinka_action@v1
           with:
-            bundler-cache: true
+            token_id: ${{ secrets.BLINKA_TOKEN_ID }}
+            token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
+```
 
-        - name: Setup Node
-          uses: actions/setup-node@v1
-          with:
-            node-version: 12.x
-
-        - name: Find yarn cache location
-          id: yarn-cache
-          run: echo "::set-output name=dir::$(yarn cache dir)"
-
-        - name: JS package cache
-          uses: actions/cache@v1
-          with:
-            path: ${{ steps.yarn-cache.outputs.dir }}
-            key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-            restore-keys: |
-              ${{ runner.os }}-yarn-
-
-        - name: Install packages
-          run: |
-            yarn install --pure-lockfile
-
-        - name: Setup test database
-          env:
-            RAILS_ENV: test
-            PGHOST: localhost
-            PGUSER: myapp
-          run: |
-            bin/rails db:setup
-
-        - name: Run tests
-          env:
-            BLINKA_JSON: true
-          run: bundle exec rails test:system test
-
-        - name: Report to Blinka
-          uses: davidwessman/blinka_action@v1
-            with:
-              token_id: ${{ secrets.BLINKA_TOKEN_ID }}
-              token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
-  ```
 </details>
 
 ## Example 2 - Separate reporting job
@@ -267,7 +245,7 @@ name: report-results
 
 on:
   workflow_run:
-    workflows: ["build-test"]
+    workflows: ['build-test']
     types:
       - completed
 
@@ -280,7 +258,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: "Download artifact"
+      - name: 'Download artifact'
         uses: actions/github-script@v3.1.0
         with:
           script: |
@@ -301,16 +279,13 @@ jobs:
             var fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/report.zip', Buffer.from(download.data));
       - run: unzip report.zip
-
-      - name: "Upload reports"
+      - name: 'Upload reports'
         uses: ./
         with:
           token_id: ${{ secrets.BLINKA_TOKEN_ID }}
           token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
-          filename: "./blinka_results.json"
-
+          filename: './blinka_results.json'
 ```
-
 
 ## Generate test report for Jest
 

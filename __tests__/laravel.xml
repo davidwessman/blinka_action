@@ -5,14 +5,14 @@
       <testcase name="testBasicExample" class="Tests\Browser\ScreenshotTest" classname="Tests.Browser.ScreenshotTest" file="/var/www/html/tests/Browser/ScreenshotTest.php" line="16" assertions="1" time="7.766092"/>
       <testcase name="testFailingExample" class="Tests\Browser\ScreenshotTest" classname="Tests.Browser.ScreenshotTest" file="/var/www/html/tests/Browser/ScreenshotTest.php" line="25" assertions="1" time="0.857467">
         <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Browser\ScreenshotTest::testFailingExample
-Did not see expected text [Blinka is the worst] within element [body].
-Failed asserting that false is true.
+        Did not see expected text [Blinka is the worst] within element [body].
+        Failed asserting that false is true.
 
-/var/www/html/vendor/laravel/dusk/src/Concerns/MakesAssertions.php:181
-/var/www/html/vendor/laravel/dusk/src/Concerns/MakesAssertions.php:152
-/var/www/html/tests/Browser/ScreenshotTest.php:29
-/var/www/html/vendor/laravel/dusk/src/Concerns/ProvidesBrowser.php:69
-/var/www/html/tests/Browser/ScreenshotTest.php:30</failure>
+        /var/www/html/vendor/laravel/dusk/src/Concerns/MakesAssertions.php:181
+        /var/www/html/vendor/laravel/dusk/src/Concerns/MakesAssertions.php:152
+        /var/www/html/tests/Browser/ScreenshotTest.php:29
+        /var/www/html/vendor/laravel/dusk/src/Concerns/ProvidesBrowser.php:69
+        /var/www/html/tests/Browser/ScreenshotTest.php:30</failure>
       </testcase>
     </testsuite>
     <testsuite name="Tests\Feature\ExampleTest" file="/var/www/html/tests/Feature/ExampleTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.181799">
