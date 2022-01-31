@@ -50,9 +50,12 @@ export class GithubClient {
       }
     }
 
-    const first = `Blinka results! ${this.tag}`
-    let body = `${first}\nTest results: ${counts.pass} pass, ${counts.skip} skipped and ${counts.fail} failed\n`
-    body += `It took ${total_duration.toFixed(2)} seconds to run.\n`
+    let first = '🚦 Blinka'
+    if (this.tag && this.tag.length > 0) {
+      first = `${first} - ${this.tag}`
+    }
+    let body = `${first}\n\nTest reported: ${counts.pass} pass, ${counts.fail} fail and ${counts.skip} skip.\n`
+    body += `\nIt took ${total_duration.toFixed(2)} seconds to run.\n`
     if (failures.length > 0) {
       body += '\n### Failures\n'
     }
