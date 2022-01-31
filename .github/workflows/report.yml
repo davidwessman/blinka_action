@@ -4,7 +4,7 @@ name: report-results
 # access to secrets
 on:
   workflow_run:
-    workflows: ["build-test"]
+    workflows: ['build-test']
     types:
       - completed
 
@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: "Download artifact"
+      - name: 'Download artifact'
         uses: actions/github-script@v5.1.0
         with:
           script: |
@@ -38,15 +38,15 @@ jobs:
             var fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/report.zip', Buffer.from(download.data));
       - run: unzip report.zip
-      - name: "Upload report to Blinka"
+      - name: 'Upload report to Blinka'
         uses: ./
         with:
           token_id: ${{ secrets.BLINKA_TOKEN_ID }}
           token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
-          filename: "./blinka_results.json"
+          filename: './blinka_results.json'
 
-      - name: "Write directly to Github"
+      - name: 'Write directly to Github'
         uses: ./
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          filename: "./blinka_results.json"
+          filename: './blinka_results.json'

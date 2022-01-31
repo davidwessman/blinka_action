@@ -267,7 +267,7 @@ class GithubClient {
         const counts = {
             pass: 0,
             skip: 0,
-            fail: 0,
+            fail: 0
         };
         const failures = [];
         for (const result of data.results) {
@@ -275,13 +275,13 @@ class GithubClient {
                 total_duration += result.time;
             }
             switch (result.result) {
-                case "pass":
+                case 'pass':
                     counts.pass += 1;
                     break;
-                case "skip":
+                case 'skip':
                     counts.skip += 1;
                     break;
-                case "fail":
+                case 'fail':
                     counts.fail += 1;
                     failures.push(result);
                     break;
@@ -289,14 +289,14 @@ class GithubClient {
                     break;
             }
         }
-        let first = "🚦 Blinka";
+        let first = '🚦 Blinka';
         if (this.tag && this.tag.length > 0) {
             first = `${first} - ${this.tag}`;
         }
         let body = `${first}\n\nTest reported: ${counts.pass} pass, ${counts.fail} fail and ${counts.skip} skip.\n`;
         body += `\nIt took ${total_duration.toFixed(2)} seconds to run.\n`;
         if (failures.length > 0) {
-            body += "\n### Failures\n";
+            body += '\n### Failures\n';
         }
         for (const failure of failures) {
             body += `\n- ${failure.path}:${failure.line} - ${failure.name}`;
@@ -304,12 +304,12 @@ class GithubClient {
         }
         const comments = await this.octokit.rest.issues.listComments({
             ...context.repo,
-            issue_number: this.pull_request_number,
+            issue_number: this.pull_request_number
         });
         let existingComment = null;
         for (const comment of comments.data) {
             if (((_a = comment.body) === null || _a === void 0 ? void 0 : _a.startsWith(first)) &&
-                ((_b = comment.user) === null || _b === void 0 ? void 0 : _b.login) === "github-actions[bot]") {
+                ((_b = comment.user) === null || _b === void 0 ? void 0 : _b.login) === 'github-actions[bot]') {
                 existingComment = comment;
                 break;
             }
@@ -318,18 +318,18 @@ class GithubClient {
             const response = await this.octokit.rest.issues.updateComment({
                 ...context.repo,
                 comment_id: existingComment.id,
-                body,
+                body
             });
-            core.debug("updateComment response");
+            core.debug('updateComment response');
             core.debug(JSON.stringify(response, null, 2));
         }
         else {
             const response = await this.octokit.rest.issues.createComment({
                 ...context.repo,
                 issue_number: this.pull_request_number,
-                body,
+                body
             });
-            core.debug("createComment response");
+            core.debug('createComment response');
             core.debug(JSON.stringify(response, null, 2));
         }
     }
