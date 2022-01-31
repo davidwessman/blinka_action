@@ -155,7 +155,7 @@ jobs:
 
 ```yaml
 name: Main
-on: [push]
+on: [push, pull_request]
 
 jobs:
   tests:
@@ -167,8 +167,8 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: synka_test
-          POSTGRES_PASSWORD: "password"
-        ports: ["5432:5432"]
+          POSTGRES_PASSWORD: 'password'
+        ports: ['5432:5432']
 
     steps:
       - name: Checkout code
@@ -183,7 +183,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-          cache: "yarn"
+          cache: 'yarn'
 
       - name: Install packages
         run: |
@@ -204,9 +204,9 @@ jobs:
 
       - name: Report to Blinka
         uses: davidwessman/blinka_action@v1
-          with:
-            token_id: ${{ secrets.BLINKA_TOKEN_ID }}
-            token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
+        with:
+          token_id: ${{ secrets.BLINKA_TOKEN_ID }}
+          token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
 ```
 
 </details>
@@ -282,9 +282,74 @@ jobs:
       - name: 'Upload reports'
         uses: ./
         with:
+          filename: './blinka_results.json'
           token_id: ${{ secrets.BLINKA_TOKEN_ID }}
           token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
-          filename: './blinka_results.json'
+```
+
+## Laravel junit
+
+Output the tests results with `--log-junit` and pass the filename to the action.
+
+```yaml
+name: Main
+on: [push, pull_request]
+jobs:
+  laravel:
+    runs-on: ubuntu-latest
+    services:
+      mysql-service:
+        # Docker Hub image (also with version)
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: db_test_password
+          MYSQL_DATABASE: db_test
+        ## map the "external" 33306 port with the "internal" 3306
+        ports:
+          - 33306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare The Environment
+        run: cp .env.example .env
+
+      - name: Install Composer Dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Upgrade Chrome Driver
+        run: php artisan dusk:chrome-driver `/opt/google/chrome/chrome --version | cut -d " " -f3 | cut -d "." -f1`
+
+      - name: Start Chrome Driver
+        run: ./vendor/laravel/dusk/bin/chromedriver-linux &
+
+      - name: Run Laravel Server
+        run: php artisan serve &
+
+      - name: Run Tests
+        continue-on-error: true
+        env:
+          APP_URL: 'http://127.0.0.1:8000'
+        run: php artisan dusk tests --log-junit ./blinka_results.xml
+
+      - name: Report test results to pull request via Github API
+        uses: davidwessman/blinka_action@main
+        with:
+          filename: ./blinka_results.xml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Report test results to pull request via Blinka
+        uses: davidwessman/blinka_action@main
+        with:
+          filename: ./blinka_results.xml
+          token_id: ${{ secrets.BLINKA_TOKEN_ID }}
+          token_secret: ${{ secrets.BLINKA_TOKEN_SECRET }}
 ```
 
 ## Generate test report for Jest
@@ -292,3 +357,8 @@ jobs:
 - Copy the [`blinka-json-reporter.ts`](./src/blinka-json-reporter.ts) to your own project.
 - Configure Jest to use the reporter, for example in [`jest.config.js`](./jest.config.js#L10) or using the flag `--reporters` (see [Documentation](https://jestjs.io/docs/configuration#reporters-arraymodulename--modulename-options))
 - Make sure to run Jest using `--testLocationInResults` to include reporting of line numbers.
+
+## Development
+
+- `npm run all` to prepare dist.
+- Generate a new release with a new tag to update the action.

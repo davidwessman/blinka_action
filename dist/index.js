@@ -27,6 +27,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
+const github = __importStar(__nccwpck_require__(5438));
 const report_blinka_1 = __nccwpck_require__(9502);
 const report_github_1 = __nccwpck_require__(715);
 async function run() {
@@ -36,6 +37,8 @@ async function run() {
         const token_secret = core.getInput('token_secret');
         const github_token = core.getInput('github_token');
         const tag = core.getInput('tag');
+        core.debug('Github context:');
+        core.debug(JSON.stringify(github.context || {}, null, 2));
         if (token_id && token_secret) {
             (0, report_blinka_1.report_to_blinka)(filename, tag, token_id, token_secret);
         }
@@ -247,7 +250,6 @@ const github = __importStar(__nccwpck_require__(5438));
 const shared_1 = __nccwpck_require__(7734);
 class GithubClient {
     constructor(token, tag) {
-        core.debug(github.context.toString());
         if (token == undefined || token.length == 0) {
             throw new shared_1.BlinkaError(`No github_token given`);
         }
@@ -265,7 +267,7 @@ class GithubClient {
         const counts = {
             pass: 0,
             skip: 0,
-            fail: 0
+            fail: 0,
         };
         const failures = [];
         for (const result of data.results) {
@@ -273,13 +275,13 @@ class GithubClient {
                 total_duration += result.time;
             }
             switch (result.result) {
-                case 'pass':
+                case "pass":
                     counts.pass += 1;
                     break;
-                case 'skip':
+                case "skip":
                     counts.skip += 1;
                     break;
-                case 'fail':
+                case "fail":
                     counts.fail += 1;
                     failures.push(result);
                     break;
@@ -291,7 +293,7 @@ class GithubClient {
         let body = `${first}\nTest results: ${counts.pass} pass, ${counts.skip} skipped and ${counts.fail} failed\n`;
         body += `It took ${total_duration.toFixed(2)} seconds to run.\n`;
         if (failures.length > 0) {
-            body += '\n### Failures\n';
+            body += "\n### Failures\n";
         }
         for (const failure of failures) {
             body += `\n- ${failure.path}:${failure.line} - ${failure.name}`;
@@ -299,29 +301,33 @@ class GithubClient {
         }
         const comments = await this.octokit.rest.issues.listComments({
             ...context.repo,
-            issue_number: this.pull_request_number
+            issue_number: this.pull_request_number,
         });
         let existingComment = null;
         for (const comment of comments.data) {
             if (((_a = comment.body) === null || _a === void 0 ? void 0 : _a.startsWith(first)) &&
-                ((_b = comment.user) === null || _b === void 0 ? void 0 : _b.login) === 'github-actions[bot]') {
+                ((_b = comment.user) === null || _b === void 0 ? void 0 : _b.login) === "github-actions[bot]") {
                 existingComment = comment;
                 break;
             }
         }
         if (existingComment) {
-            this.octokit.rest.issues.updateComment({
+            const response = await this.octokit.rest.issues.updateComment({
                 ...context.repo,
                 comment_id: existingComment.id,
-                body
+                body,
             });
+            core.debug("updateComment response");
+            core.debug(JSON.stringify(response, null, 2));
         }
         else {
-            this.octokit.rest.issues.createComment({
+            const response = await this.octokit.rest.issues.createComment({
                 ...context.repo,
                 issue_number: this.pull_request_number,
-                body
+                body,
             });
+            core.debug("createComment response");
+            core.debug(JSON.stringify(response, null, 2));
         }
     }
 }
