@@ -10,7 +10,6 @@ export class GithubClient {
   tag: string
 
   constructor(token: string, tag: string) {
-    core.debug(github.context.toString())
     if (token == undefined || token.length == 0) {
       throw new BlinkaError(`No github_token given`)
     }
@@ -78,17 +77,21 @@ export class GithubClient {
     }
 
     if (existingComment) {
-      this.octokit.rest.issues.updateComment({
+      const response = await this.octokit.rest.issues.updateComment({
         ...context.repo,
         comment_id: existingComment.id,
         body
       })
+      core.debug('updateComment response')
+      core.debug(JSON.stringify(response, null, 2))
     } else {
-      this.octokit.rest.issues.createComment({
+      const response = await this.octokit.rest.issues.createComment({
         ...context.repo,
         issue_number: this.pull_request_number,
         body
       })
+      core.debug('createComment response')
+      core.debug(JSON.stringify(response, null, 2))
     }
   }
 }
