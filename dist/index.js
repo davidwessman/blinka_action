@@ -247,6 +247,10 @@ const github = __importStar(__nccwpck_require__(5438));
 const shared_1 = __nccwpck_require__(7734);
 class GithubClient {
     constructor(token, tag) {
+        core.debug(github.context.toString());
+        if (token == undefined || token.length == 0) {
+            throw new shared_1.BlinkaError(`No github_token given`);
+        }
         this.octokit = github.getOctokit(token);
         if (github.context.payload.pull_request == null) {
             throw new shared_1.BlinkaError(`Only works for pull requests`);
