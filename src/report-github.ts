@@ -10,6 +10,10 @@ export class GithubClient {
   tag: string
 
   constructor(token: string, tag: string) {
+    core.debug(github.context.toString())
+    if (token == undefined || token.length == 0) {
+      throw new BlinkaError(`No github_token given`)
+    }
     this.octokit = github.getOctokit(token)
     if (github.context.payload.pull_request == null) {
       throw new BlinkaError(`Only works for pull requests`)
