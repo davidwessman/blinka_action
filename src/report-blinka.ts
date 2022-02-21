@@ -138,6 +138,7 @@ export async function report_to_blinka(
   const data: JsonReport = await readTestResults(filename)
   const client = new BlinkaClient(blinka_host, token_id, token_secret)
   const repo = github.context.repo
+
   try {
     await client.setup()
 
@@ -146,8 +147,8 @@ export async function report_to_blinka(
     const body: TestReportBody = {
       report: {
         repository: `${repo.owner}/${repo.repo}`,
-        tag: tag || data.tag,
-        commit: data.commit,
+        tag: tag,
+        commit: github.context.sha,
         metadata: {
           total_time: data.total_time,
           nbr_tests: data.nbr_tests,
