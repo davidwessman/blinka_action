@@ -100,11 +100,11 @@ function initialize_client(token = null) {
     if (token) {
         bearers.push(new auth.BearerCredentialHandler(token));
     }
-    return new httpm.HttpClient('blinka', bearers, {
+    return new httpm.HttpClient("blinka", bearers, {
         headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        }
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
     });
 }
 class BlinkaClient {
@@ -119,12 +119,12 @@ class BlinkaClient {
         try {
             const result = await this.client.post(`${this.host}/authentication`, JSON.stringify({
                 token_id: this.token_id,
-                token_secret: this.token_secret
+                token_secret: this.token_secret,
             }));
             if (result.message.statusCode !== 200) {
                 throw new shared_1.BlinkaError(`Could not authenticate to ${this.host}`);
             }
-            this.client = initialize_client(JSON.parse(await result.readBody())['auth_token']);
+            this.client = initialize_client(JSON.parse(await result.readBody())["auth_token"]);
             this.authenticated = true;
         }
         catch (error) {
@@ -145,7 +145,7 @@ class BlinkaClient {
         const image = await this.handle_image(result.image);
         return {
             ...result,
-            image
+            image,
         };
     }
     async handle_image(image) {
@@ -165,26 +165,26 @@ class BlinkaClient {
         for (const key of Object.keys(fields)) {
             form.append(key, fields[key]);
         }
-        form.append('file', fs_1.default.createReadStream(image));
+        form.append("file", fs_1.default.createReadStream(image));
         form.submit(url, function (err, res) {
             if (err || res.statusCode !== 204) {
-                throw new shared_1.BlinkaError('Failed to upload image to presigned url');
+                throw new shared_1.BlinkaError("Failed to upload image to presigned url");
             }
         });
-        const [storage, id] = fields.key.split('/');
+        const [storage, id] = fields.key.split("/");
         return {
             id,
             storage,
             metadata: {
                 size,
                 filename,
-                mime_type: content_type
-            }
+                mime_type: content_type,
+            },
         };
     }
 }
 exports.BlinkaClient = BlinkaClient;
-async function report_to_blinka(filename, tag, token_id, token_secret, blinka_host = 'https://www.blinka.app/api/v1') {
+async function report_to_blinka(filename, tag, token_id, token_secret, blinka_host = "https://www.blinka.app/api/v1") {
     const data = await (0, shared_1.readTestResults)(filename);
     const client = new BlinkaClient(blinka_host, token_id, token_secret);
     const repo = github.context.repo;
@@ -194,15 +194,15 @@ async function report_to_blinka(filename, tag, token_id, token_secret, blinka_ho
         const body = {
             report: {
                 repository: `${repo.owner}/${repo.repo}`,
-                tag: tag || data.tag,
-                commit: data.commit,
+                tag: tag,
+                commit: github.context.sha,
                 metadata: {
                     total_time: data.total_time,
                     nbr_tests: data.nbr_tests,
-                    seed: data.seed
+                    seed: data.seed,
                 },
-                results
-            }
+                results,
+            },
         };
         await client.report(body);
     }
