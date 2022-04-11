@@ -23,7 +23,7 @@ jobs:
           mkdir ./report
           [ ! -f ./blinka_results.json ] || mv blinka_results.json ./report
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: report
