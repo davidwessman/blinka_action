@@ -1,4 +1,4 @@
-import * as auth from '@actions/http-client/auth'
+import * as auth from '@actions/http-client/lib/auth'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as httpm from '@actions/http-client'

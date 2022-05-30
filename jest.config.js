@@ -12,5 +12,8 @@ module.exports = {
     './lib/blinka-json-reporter.js',
     ['jest-junit', {suiteName: 'jest tests'}]
   ],
-  verbose: true
+  verbose: true,
+  fakeTimers: {
+    enableGlobally: false
+  }
 }
