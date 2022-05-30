@@ -1,7 +1,8 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import {AggregatedResult, TestResult} from '@jest/test-result'
-import {Context, Reporter} from '@jest/reporters'
+import {Reporter} from '@jest/reporters'
+import {TestContext} from '@jest/test-result'
 
 interface IResult {
   line: number
@@ -28,7 +29,7 @@ export default class BlinkaJSONReporter
   implements Pick<Reporter, 'onRunComplete'>
 {
   async onRunComplete(
-    _: Set<Context>,
+    _: Set<TestContext>,
     results: AggregatedResult
   ): Promise<void> {
     const test_results = await this.convert_results(results.testResults)
